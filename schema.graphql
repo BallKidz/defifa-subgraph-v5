@@ -8,7 +8,7 @@ type Transfer @entity(immutable: true) {
   transactionHash: Bytes!
 }
 
-type Token @entity {
+type Token @entity(immutable: false) {
   id: ID!
   owner: Owner!
   uri: String
@@ -19,7 +19,7 @@ type Token @entity {
   gameId: BigInt!
 }
 
-type TokenMetadata @entity {
+type TokenMetadata @entity(immutable: false) {
   id: ID!
   token: Token!
   name: String
@@ -29,13 +29,13 @@ type TokenMetadata @entity {
   image: String
 }
 
-type Owner @entity {
+type Owner @entity(immutable: false) {
   id: ID!
   ownedTokens: [Token!]! @derivedFrom(field: "owner")
   balance: BigInt!
 }
 
-type Contract @entity {
+type Contract @entity(immutable: false) {
   id: Bytes!
   address: Bytes!
   gameId: BigInt!
@@ -47,22 +47,23 @@ type Contract @entity {
   mintedTokens: [Token!]! @derivedFrom(field: "contract")
 }
 
-type Account @entity {
+type Account @entity(immutable: false) {
   id: Bytes!
   events: [Event!]! @derivedFrom(field: "emitter")
   scorecards: [Scorecard!]! @derivedFrom(field: "submitter")
 }
 
-type DefifaTierRedemptionWeight @entity {
+type DefifaTierRedemptionWeight @entity(immutable: true) {
   id: ID!
   tierId: ID!
   redemptionWeight: BigInt!
   scorecard: Scorecard!
 }
 
-type Scorecard @entity {
+type Scorecard @entity(immutable: false) {
   id: ID!
   gameId: ID!
+  scorecardId: BigInt!
   submitter: Account!
   tierWeights: [DefifaTierRedemptionWeight!]! @derivedFrom(field: "scorecard")
 }

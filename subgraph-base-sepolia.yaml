@@ -1,0 +1,74 @@
+specVersion: 0.0.4
+schema:
+  file: ./schema.graphql
+description: Defifa Subgraph for Base Sepolia Network
+dataSources:
+  - kind: ethereum
+    name: DefifaDeployer
+    network: base-sepolia
+    source:
+      abi: DefifaDeployer
+      address: "0xaa1c5d7bee4cc88523286774dffeab26687ec0ff"
+      startBlock: 1000000
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Contract
+      abis:
+        - name: DefifaDeployer
+          file: ./abis/DefifaDeployer.json
+        - name: DefifaNFT
+          file: ./abis/DefifaNFT.json
+        - name: DefifaGovernor
+          file: ./abis/DefifaGovernor.json
+      eventHandlers:
+        - event: LaunchGame(indexed uint256,indexed address,indexed address,address,address)
+          handler: handleLaunchGame
+      file: ./src/mappings/defifa-deployer.ts
+
+templates:
+  - kind: ethereum
+    name: DefifaNFT
+    network: base-sepolia
+    source:
+      abi: DefifaNFT
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+        - Owner
+        - Token
+        - TokenMetadata
+      abis:
+        - name: DefifaNFT
+          file: ./abis/DefifaNFT.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/mappings/defifa-nft.ts
+
+  - kind: ethereum
+    name: Governor
+    network: base-sepolia
+    source:
+      abi: DefifaGovernor
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Account
+        - Scorecard
+        - DefifaTierRedemptionWeight
+      abis:
+        - name: DefifaGovernor
+          file: ./abis/DefifaGovernor.json
+      eventHandlers:
+        - event: ScorecardSubmitted(indexed uint256,indexed uint256,(uint256,uint256)[],bool,address)
+          handler: handleScorecardSubmitted
+      file: ./src/mappings/governor.ts
+
