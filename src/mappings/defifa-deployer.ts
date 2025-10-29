@@ -7,7 +7,8 @@ import {
   Account
 } from "../../generated/schema"
 import {
-  DefifaNFT as Contract
+  DefifaNFT as Contract,
+  Governor
 } from "../../generated/templates"
 
 import { DefifaNFT } from "../../generated/templates/DefifaNFT/DefifaNFT"
@@ -46,5 +47,10 @@ export function handleLaunchGame(event: LaunchGameEvent): void {
   let defifaContractContext = new DataSourceContext()
   defifaContractContext.setBigInt("gameId", gameId)
   Contract.createWithContext(delegate, defifaContractContext)
+  
+  // Also instantiate the Governor template to listen for scorecard events
+  let governorContext = new DataSourceContext()
+  governorContext.setBigInt("gameId", gameId)
+  Governor.createWithContext(governor, governorContext)
 }
 
