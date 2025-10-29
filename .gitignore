@@ -20,6 +20,9 @@ hardhat.config.js
 # production
 /build
 
+# generated code
+/generated
+
 # misc
 .DS_Store
 *.pem
@@ -38,5 +41,3 @@ yarn-error.log*
 
 # vercel
 .vercel
-
-generated/

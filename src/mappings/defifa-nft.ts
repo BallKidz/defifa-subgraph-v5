@@ -17,7 +17,6 @@ import {
   TokenMetadata
 } from "../../generated/schema"
 import { decode } from "as-base64"
-import { TokenMetadata as TokenMetadataTemplate } from "../../generated/templates"
 
 export function handleTransfer(event: TransferEvent): void {
   let transfer = new Transfer(
@@ -45,7 +44,6 @@ export function handleTransfer(event: TransferEvent): void {
     token = new Token(tokenFullId)
     token.number = event.params.tokenId
     token.contract = contract.id
-    token.gameId = contract.gameId
     let uri = instance.try_tokenURI(event.params.tokenId)
     if (!uri.reverted) {
       token.uri = uri.value
@@ -76,13 +74,13 @@ export function handleTransfer(event: TransferEvent): void {
 
         tokenMetadata.save()
       } else if (uri.value.startsWith("ipfs://")) {
-        const datasourceContext = dataSource.context()
-        datasourceContext.setString("tokenId", tokenId)
-        datasourceContext.setString("contract", event.address.toHexString())
-        TokenMetadataTemplate.createWithContext(
-          uri.value.substring(7),
-          datasourceContext
-        )
+        // For IPFS URIs, we'll create a basic TokenMetadata entry
+        // The actual metadata fetching would need to be handled by the frontend
+        let tokenMetadata = new TokenMetadata(tokenFullId)
+        tokenMetadata.token = tokenFullId
+        tokenMetadata.name = "NFT #" + tokenId
+        tokenMetadata.image = "https://ipfs.io/ipfs/" + uri.value.substring(7)
+        tokenMetadata.save()
       }
     }
 
@@ -110,3 +108,4 @@ export function getOrCreateOwner(id: Address): Owner {
   }
   return owner
 }
+
