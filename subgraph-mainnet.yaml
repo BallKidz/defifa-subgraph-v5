@@ -1,15 +1,15 @@
 specVersion: 0.0.4
 schema:
   file: ./schema.graphql
-description: Defifa Subgraph for Base Sepolia Network
+description: Defifa Subgraph for Ethereum Mainnet
 dataSources:
   - kind: ethereum
     name: DefifaDeployer
-    network: base-sepolia
+    network: mainnet
     source:
       abi: DefifaDeployer
       address: "0xaa1c5d7bee4cc88523286774dffeab26687ec0ff"
-      startBlock: 33341093
+      startBlock: 0
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -31,7 +31,7 @@ dataSources:
 templates:
   - kind: ethereum
     name: DefifaNFT
-    network: base-sepolia
+    network: mainnet
     source:
       abi: DefifaNFT
     mapping:
@@ -53,7 +53,7 @@ templates:
 
   - kind: ethereum
     name: Governor
-    network: base-sepolia
+    network: mainnet
     source:
       abi: DefifaGovernor
     mapping:
@@ -71,4 +71,5 @@ templates:
         - event: ScorecardSubmitted(indexed uint256,indexed uint256,(uint256,uint256)[],bool,address)
           handler: handleScorecardSubmitted
       file: ./src/mappings/governor.ts
+
 
